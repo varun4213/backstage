@@ -6675,7 +6675,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@internal/plugin-survey-common@npm:^0.1.0, @internal/plugin-survey-common@workspace:plugins/survey-common":
+"@internal/plugin-survey-common@npm:^0.1.0, @internal/plugin-survey-common@workspace:^, @internal/plugin-survey-common@workspace:plugins/survey-common":
   version: 0.0.0-use.local
   resolution: "@internal/plugin-survey-common@workspace:plugins/survey-common"
   dependencies:
@@ -6693,8 +6693,10 @@ __metadata:
     "@backstage/core-components": "npm:^0.17.4"
     "@backstage/core-plugin-api": "npm:^1.10.9"
     "@backstage/dev-utils": "npm:^1.1.12"
+    "@backstage/plugin-permission-react": "npm:^0.4.36"
     "@backstage/test-utils": "npm:^1.7.10"
     "@backstage/theme": "npm:^0.6.7"
+    "@internal/plugin-survey-common": "workspace:^"
     "@material-ui/core": "npm:^4.9.13"
     "@material-ui/icons": "npm:^4.9.1"
     "@material-ui/lab": "npm:^4.0.0-alpha.61"
@@ -6703,6 +6705,7 @@ __metadata:
     "@testing-library/user-event": "npm:^14.0.0"
     msw: "npm:^1.0.0"
     react: "npm:^16.13.1 || ^17.0.0 || ^18.0.0"
+    react-router-dom: "npm:^6.3.0"
     react-use: "npm:^17.2.4"
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
@@ -30919,6 +30922,7 @@ __metadata:
     node-gyp: "npm:^10.0.0"
     prettier: "npm:^2.3.2"
     typescript: "npm:~5.8.0"
+    uuid: "npm:^11.1.0"
   languageName: unknown
   linkType: soft
 
@@ -34086,7 +34090,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^11.0.0, uuid@npm:^11.0.2":
+"uuid@npm:^11.0.0, uuid@npm:^11.0.2, uuid@npm:^11.1.0":
   version: 11.1.0
   resolution: "uuid@npm:11.1.0"
   bin:

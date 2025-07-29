@@ -27,10 +27,13 @@
   "dependencies": {
     "@backstage/core-components": "^0.17.4",
     "@backstage/core-plugin-api": "^1.10.9",
+    "@backstage/plugin-permission-react": "^0.4.36",
     "@backstage/theme": "^0.6.7",
+    "@internal/plugin-survey-common": "workspace:^",
     "@material-ui/core": "^4.9.13",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.61",
+    "react-router-dom": "^6.3.0",
     "react-use": "^17.2.4"
   },
   "peerDependencies": {

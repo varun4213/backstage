@@ -45,15 +45,17 @@ export async function createRouter({
     res.json(await todoListService.listTodos());
   });
 
-  router.get('/todos/:id', async (req, res) => {
-    res.json(await todoListService.getTodo({ id: req.params.id }));
-  });
-
   // Survey schemas
   const surveySchema = z.object({
     title: z.string(),
     description: z.string().optional(),
     ownerGroup: z.string().optional(),
+    templates: z.array(z.string()).optional(),
+    questions: z.array(z.object({
+      type: z.enum(['text', 'rating', 'multiple-choice']),
+      label: z.string(),
+      options: z.array(z.string()).optional(),
+    })),
   });
 
   const responseSchema = z.object({
@@ -68,42 +70,143 @@ export async function createRouter({
       throw new InputError(parsed.error.toString());
     }
 
-    const id = uuid();
-    await knex('surveys').insert({ 
-      id, 
-      ...parsed.data, 
-      createdAt: new Date().toISOString() 
+    // Get user credentials for authentication
+    const credentials = await httpAuth.credentials(req, { allow: ['user'] });
+
+    const surveyId = uuid();
+    const surveyData = {
+      id: surveyId,
+      ...parsed.data,
+      createdAt: new Date().toISOString(),
+    };
+
+    // Insert survey
+    await knex('surveys').insert({
+      id: surveyData.id,
+      title: surveyData.title,
+      description: surveyData.description || '',
+      ownerGroup: surveyData.ownerGroup,
+      templates: surveyData.templates ? JSON.stringify(surveyData.templates) : null,
+      createdAt: surveyData.createdAt,
     });
-    res.status(201).json({ id });
+
+    // Insert questions
+    const questions = parsed.data.questions.map(question => ({
+      id: uuid(),
+      surveyId: surveyId,
+      type: question.type,
+      label: question.label,
+      options: question.options ? JSON.stringify(question.options) : null,
+    }));
+
+    if (questions.length > 0) {
+      await knex('questions').insert(questions);
+    }
+
+    res.status(201).json({ id: surveyId });
   });
 
-  router.get('/surveys', async (_req, res) => {
-    const surveys = await knex('surveys').select('*');
-    res.json(surveys);
+  router.get('/surveys', async (req, res) => {
+    // Get user credentials for authentication
+    const credentials = await httpAuth.credentials(req, { allow: ['user'] });
+    const surveys = await knex('surveys').select('*').orderBy('createdAt', 'desc');
+    
+    // Get questions for each survey
+    const surveysWithQuestions = await Promise.all(
+      surveys.map(async (survey) => {
+        const questions = await knex('questions')
+          .where('surveyId', survey.id)
+          .select('*');
+        
+        return {
+          ...survey,
+          templates: survey.templates ? JSON.parse(survey.templates) : [],
+          questions: questions.map(q => ({
+            ...q,
+            options: q.options ? JSON.parse(q.options) : undefined,
+          })),
+        };
+      })
+    );
+
+    res.json(surveysWithQuestions);
   });
 
   router.get('/surveys/:id', async (req, res) => {
+    // Get user credentials for authentication
+    const credentials = await httpAuth.credentials(req, { allow: ['user'] });
+    
     const survey = await knex('surveys').where('id', req.params.id).first();
     if (!survey) {
       throw new InputError(`Survey with id ${req.params.id} not found`);
     }
-    res.json(survey);
+
+    const questions = await knex('questions')
+      .where('surveyId', req.params.id)
+      .select('*');
+
+    const surveyWithQuestions = {
+      ...survey,
+      templates: survey.templates ? JSON.parse(survey.templates) : [],
+      questions: questions.map(q => ({
+        ...q,
+        options: q.options ? JSON.parse(q.options) : undefined,
+      })),
+    };
+
+    res.json(surveyWithQuestions);
   });
 
   router.post('/surveys/:id/response', async (req, res) => {
+    // Get user credentials for authentication
+    const credentials = await httpAuth.credentials(req, { allow: ['user'] });
+    
     const parsed = responseSchema.safeParse(req.body);
     if (!parsed.success) {
       throw new InputError(parsed.error.toString());
     }
 
-    const id = uuid();
+    // Check if survey exists
+    const survey = await knex('surveys').where('id', req.params.id).first();
+    if (!survey) {
+      throw new InputError(`Survey with id ${req.params.id} not found`);
+    }
+
+    const responseId = uuid();
     await knex('responses').insert({ 
-      id, 
+      id: responseId, 
       surveyId: req.params.id, 
-      ...parsed.data, 
+      userRef: parsed.data.userRef,
+      answers: JSON.stringify(parsed.data.answers),
       submittedAt: new Date().toISOString() 
     });
-    res.status(201).json({ id });
+    
+    res.status(201).json({ id: responseId });
+  });
+
+  router.get('/surveys/:id/results', async (req, res) => {
+    // Get user credentials for authentication
+    const credentials = await httpAuth.credentials(req, { allow: ['user'] });
+    
+    const survey = await knex('surveys').where('id', req.params.id).first();
+    if (!survey) {
+      throw new InputError(`Survey with id ${req.params.id} not found`);
+    }
+
+    const responses = await knex('responses')
+      .where('surveyId', req.params.id)
+      .select('*');
+
+    const results = {
+      survey,
+      totalResponses: responses.length,
+      responses: responses.map(r => ({
+        ...r,
+        answers: JSON.parse(r.answers),
+      })),
+    };
+
+    res.json(results);
   });
 
   return router;

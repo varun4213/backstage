@@ -1,0 +1,38 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: example-nodejs-template-2
+  title: Example Node.js Template 2
+  description: Another dummy Node.js template for testing multi-select in surveys
+spec:
+  owner: user:guest
+  type: service
+  parameters:
+    - title: Fill in some steps
+      required:
+        - name
+      properties:
+        name:
+          title: Name
+          type: string
+          description: Unique name of the component
+          ui:autofocus: true
+          ui:options:
+            rows: 5
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+  steps:
+    - id: log
+      name: Log
+      action: debug:log
+      input:
+        message: 'Scaffolding ${{ parameters.name }} at ${{ parameters.repoUrl }}'

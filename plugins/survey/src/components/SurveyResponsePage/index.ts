@@ -1,0 +1,1 @@
+export { SurveyResponsePage } from './SurveyResponsePage';

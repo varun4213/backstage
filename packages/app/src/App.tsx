@@ -35,7 +35,13 @@ import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
-import { SurveyPage } from '@internal/plugin-survey';
+import { 
+  SurveyPage, 
+  SurveyCatalogPage, 
+  SurveyBuilderPage, 
+  SurveyResponsePage 
+} from '@internal/plugin-survey';
+import { surveyCreatePermission } from '@internal/plugin-survey-common';
 
 const app = createApp({
   apis,
@@ -96,12 +102,22 @@ const routes = (
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/survey" element={<SurveyPage />} />
+    <Route path="/surveys" element={<SurveyCatalogPage />} />
+    <Route
+      path="/surveys/create"
+      element={
+        <RequirePermission permission={surveyCreatePermission}>
+          <SurveyBuilderPage />
+        </RequirePermission>
+      }
+    />
+    <Route path="/surveys/:id" element={<SurveyResponsePage />} />
   </FlatRoutes>
 );
 
 export default app.createRoot(
   <>
-    <AlertDisplay />
+    <AlertDisplay transientTimeoutMs={3000} />
     <OAuthRequestDialog />
     <AppRouter>
       <Root>{routes}</Root>

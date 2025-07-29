@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Template
+metadata:
+  name: example-nodejs-template-2
+  title: Example Node.js Template 2
+  description: Another dummy Node.js template for testing multi-select in surveys
+spec:
+  owner: user:guest
+  type: service
