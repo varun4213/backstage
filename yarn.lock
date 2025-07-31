@@ -3696,41 +3696,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-app@npm:^0.1.11":
-  version: 0.1.11
-  resolution: "@backstage/plugin-app@npm:0.1.11"
-  dependencies:
-    "@backstage/core-components": "npm:^0.17.4"
-    "@backstage/core-plugin-api": "npm:^1.10.9"
-    "@backstage/frontend-plugin-api": "npm:^0.10.4"
-    "@backstage/integration-react": "npm:^1.2.9"
-    "@backstage/plugin-permission-react": "npm:^0.4.36"
-    "@backstage/theme": "npm:^0.6.7"
-    "@backstage/types": "npm:^1.2.1"
-    "@material-ui/core": "npm:^4.9.13"
-    "@material-ui/icons": "npm:^4.9.1"
-    "@material-ui/lab": "npm:^4.0.0-alpha.61"
-    react-use: "npm:^17.2.4"
-  peerDependencies:
-    "@types/react": ^17.0.0 || ^18.0.0
-    react: ^17.0.0 || ^18.0.0
-    react-dom: ^17.0.0 || ^18.0.0
-    react-router-dom: ^6.3.0
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: 10c0/fd129828d2f22fd8620445a9d8588ff0c3e2a61c31b4dc6ee1f8b8f69901ac37d7963d571aafa20d0577204ae19964d0995d9c2ab779a60fefb474454436d056
-  languageName: node
-  linkType: hard
-
-"@backstage/plugin-auth-backend-module-github-provider@npm:^0.3.5":
-  version: 0.3.5
-  resolution: "@backstage/plugin-auth-backend-module-github-provider@npm:0.3.5"
-  dependencies:
-    "@backstage/backend-plugin-api": "npm:^1.4.1"
-    "@backstage/plugin-auth-node": "npm:^0.6.5"
-    passport-github2: "npm:^0.1.12"
-    zod: "npm:^3.22.4"
   checksum: 10c0/4f71abf9baf61132ff0b6e296a0a1338346f9ad86eb66e6897e10dd8174683fafed137ba159f59b4b6786b9236fa4c300792db3462f63f829929d41ed443615d
   languageName: node
   linkType: hard
@@ -16270,7 +16235,6 @@ __metadata:
     "@backstage/backend-defaults": "npm:^0.11.1"
     "@backstage/cli": "npm:^0.33.1"
     "@backstage/config": "npm:^1.3.3"
-    "@backstage/plugin-app-backend": "npm:^0.5.4"
     "@backstage/plugin-auth-backend": "npm:^0.25.2"
     "@backstage/plugin-auth-backend-module-github-provider": "npm:^0.3.5"
     "@backstage/plugin-auth-backend-module-guest-provider": "npm:^0.2.10"
@@ -16293,7 +16257,6 @@ __metadata:
     "@backstage/plugin-search-backend-node": "npm:^1.3.13"
     "@backstage/plugin-techdocs-backend": "npm:^2.0.4"
     "@internal/plugin-survey-backend": "workspace:^"
-    app: "link:../app"
     better-sqlite3: "npm:^9.0.0"
     node-gyp: "npm:^10.0.0"
     pg: "npm:^8.11.3"
