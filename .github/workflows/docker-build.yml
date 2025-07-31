@@ -26,8 +26,8 @@ jobs:
       - name: Type check and build
         run: |
           yarn tsc
-          yarn build:frontend --config app-config.yaml
-          yarn build:backend --config app-config.yaml
+          yarn build:frontend
+          yarn build:backend
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
