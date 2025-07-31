@@ -1,5 +1,4 @@
-import React from 'react';
-import { Box, CircularProgress, Typography } from '@material-ui/core';
+import { CircularProgress, Typography } from '@material-ui/core';
 import { motion } from 'framer-motion';
 
 export const AnimatedProgress = ({ message = 'Loading...' }: { message?: string }) => {

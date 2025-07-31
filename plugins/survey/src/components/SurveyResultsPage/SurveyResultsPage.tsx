@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Typography,
   Box,
@@ -30,7 +30,7 @@ interface SurveyResponse {
   submittedAt: string;
 }
 
-export const SurveyResultsPage: React.FC = () => {
+export const SurveyResultsPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { canViewResults } = useUserRole();

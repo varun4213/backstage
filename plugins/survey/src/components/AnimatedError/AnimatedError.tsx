@@ -1,5 +1,4 @@
-import React from 'react';
-import { Box, Typography, Button } from '@material-ui/core';
+import { Typography, Button } from '@material-ui/core';
 import { motion } from 'framer-motion';
 import { ErrorOutline } from '@material-ui/icons';
 

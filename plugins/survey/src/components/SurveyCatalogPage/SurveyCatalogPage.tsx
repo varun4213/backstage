@@ -93,7 +93,7 @@ export const SurveyCatalogPage = () => {
     
     // Use Backstage/Material-UI theme for true dark/light detection
     const theme = useTheme();
-    const isDark = theme.palette.type === 'dark' || theme.palette.mode === 'dark';
+    const isDark = theme.palette.type === 'dark';
     const cardBg = isDark ? theme.palette.background.paper || '#23272f' : '#fff';
     const cardText = isDark ? theme.palette.text.primary || '#fff' : '#23272f';
     const descText = isDark ? theme.palette.text.secondary || '#b0b0b0' : '#444';
@@ -254,7 +254,7 @@ export const SurveyCatalogPage = () => {
           </Box>
         </Header>
       </motion.div>
-      <Content maxWidth={false} style={{ padding: 0, margin: 0 }}>
+      <Content noPadding>
         <Box style={{ padding: 'clamp(1rem, 3vw, 2rem)', width: '100%', boxSizing: 'border-box' }}>
           <motion.div
             initial={{ opacity: 0 }}
