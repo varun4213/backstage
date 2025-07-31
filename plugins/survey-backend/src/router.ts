@@ -71,7 +71,7 @@ export async function createRouter({
     }
 
     // Get user credentials for authentication
-    const credentials = await httpAuth.credentials(req, { allow: ['user'] });
+    await httpAuth.credentials(req, { allow: ['user'] });
 
     const surveyId = uuid();
     const surveyData = {
@@ -108,7 +108,7 @@ export async function createRouter({
 
   router.get('/surveys', async (req, res) => {
     // Get user credentials for authentication
-    const credentials = await httpAuth.credentials(req, { allow: ['user'] });
+    await httpAuth.credentials(req, { allow: ['user'] });
     const surveys = await knex('surveys').select('*').orderBy('createdAt', 'desc');
     
     // Get questions for each survey
@@ -134,7 +134,7 @@ export async function createRouter({
 
   router.get('/surveys/:id', async (req, res) => {
     // Get user credentials for authentication
-    const credentials = await httpAuth.credentials(req, { allow: ['user'] });
+    await httpAuth.credentials(req, { allow: ['user'] });
     
     const survey = await knex('surveys').where('id', req.params.id).first();
     if (!survey) {
@@ -159,7 +159,7 @@ export async function createRouter({
 
   router.post('/surveys/:id/response', async (req, res) => {
     // Get user credentials for authentication
-    const credentials = await httpAuth.credentials(req, { allow: ['user'] });
+    await httpAuth.credentials(req, { allow: ['user'] });
     
     const parsed = responseSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -184,9 +184,30 @@ export async function createRouter({
     res.status(201).json({ id: responseId });
   });
 
+  router.get('/surveys/:id/responses', async (req, res) => {
+    // Get user credentials for authentication
+    await httpAuth.credentials(req, { allow: ['user'] });
+    
+    const survey = await knex('surveys').where('id', req.params.id).first();
+    if (!survey) {
+      throw new InputError(`Survey with id ${req.params.id} not found`);
+    }
+
+    const responses = await knex('responses')
+      .where('surveyId', req.params.id)
+      .select('*');
+
+    const mappedResponses = responses.map(r => ({
+      ...r,
+      answers: JSON.parse(r.answers),
+    }));
+
+    res.json(mappedResponses);
+  });
+
   router.get('/surveys/:id/results', async (req, res) => {
     // Get user credentials for authentication
-    const credentials = await httpAuth.credentials(req, { allow: ['user'] });
+    await httpAuth.credentials(req, { allow: ['user'] });
     
     const survey = await knex('surveys').where('id', req.params.id).first();
     if (!survey) {

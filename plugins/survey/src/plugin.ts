@@ -2,7 +2,7 @@ import {
   createPlugin,
   createRoutableExtension,
 } from '@backstage/core-plugin-api';
-import { rootRouteRef, surveyCreateRouteRef, surveyViewRouteRef } from './routes';
+import { rootRouteRef, surveyCreateRouteRef, surveyViewRouteRef, surveyResultsRouteRef } from './routes';
 
 export const surveyPlugin = createPlugin({
   id: 'survey',
@@ -10,6 +10,7 @@ export const surveyPlugin = createPlugin({
     root: rootRouteRef,
     create: surveyCreateRouteRef,
     view: surveyViewRouteRef,
+    results: surveyResultsRouteRef,
   },
 });
 
@@ -17,7 +18,7 @@ export const SurveyPage = surveyPlugin.provide(
   createRoutableExtension({
     name: 'SurveyPage',
     component: () =>
-      import('./components/ExampleComponent').then(m => m.ExampleComponent),
+      import('./components/SurveyRouter').then(m => m.SurveyRouter),
     mountPoint: rootRouteRef,
   }),
 );
@@ -46,5 +47,14 @@ export const SurveyResponsePage = surveyPlugin.provide(
     component: () =>
       import('./components/SurveyResponsePage').then(m => m.SurveyResponsePage),
     mountPoint: surveyViewRouteRef,
+  }),
+);
+
+export const SurveyResultsPage = surveyPlugin.provide(
+  createRoutableExtension({
+    name: 'SurveyResultsPage',
+    component: () =>
+      import('./components/SurveyResultsPage').then(m => m.SurveyResultsPage),
+    mountPoint: surveyResultsRouteRef,
   }),
 );

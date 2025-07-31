@@ -39,9 +39,10 @@ import {
   SurveyPage, 
   SurveyCatalogPage, 
   SurveyBuilderPage, 
-  SurveyResponsePage 
+  SurveyResponsePage,
+  SurveyResultsPage,
+  UserRoleProvider 
 } from '@internal/plugin-survey';
-import { surveyCreatePermission } from '@internal/plugin-survey-common';
 
 const app = createApp({
   apis,
@@ -101,17 +102,11 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
-    <Route path="/survey" element={<SurveyPage />} />
+    <Route path="/survey/*" element={<SurveyPage />} />
     <Route path="/surveys" element={<SurveyCatalogPage />} />
-    <Route
-      path="/surveys/create"
-      element={
-        <RequirePermission permission={surveyCreatePermission}>
-          <SurveyBuilderPage />
-        </RequirePermission>
-      }
-    />
+    <Route path="/surveys/create" element={<SurveyBuilderPage />} />
     <Route path="/surveys/:id" element={<SurveyResponsePage />} />
+    <Route path="/surveys/:id/results" element={<SurveyResultsPage />} />
   </FlatRoutes>
 );
 
@@ -119,8 +114,10 @@ export default app.createRoot(
   <>
     <AlertDisplay transientTimeoutMs={3000} />
     <OAuthRequestDialog />
-    <AppRouter>
-      <Root>{routes}</Root>
-    </AppRouter>
+    <UserRoleProvider>
+      <AppRouter>
+        <Root>{routes}</Root>
+      </AppRouter>
+    </UserRoleProvider>
   </>,
 );

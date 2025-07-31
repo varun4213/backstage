@@ -26,10 +26,11 @@ import {
   ContentHeader,
   InfoCard,
 } from '@backstage/core-components';
-import { useApi, configApiRef, fetchApiRef } from '@backstage/core-plugin-api';
+import { useApi, configApiRef, fetchApiRef, alertApiRef } from '@backstage/core-plugin-api';
 import { CreateSurveyRequest, Question } from '@internal/plugin-survey-common';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { alertApiRef } from '@backstage/core-plugin-api';
+import { useUserRole } from '../UserRoleSelector';
 
 type QuestionType = 'text' | 'rating' | 'multiple-choice';
 
@@ -83,70 +84,133 @@ const QuestionBuilder = React.memo(({
   }, [question.tempId, removeOption]);
 
   return (
-    <Card style={{ marginBottom: 16 }}>
-      <CardContent>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={11}>
-            <TextField
-              fullWidth
-              label="Question"
-              value={question.label || ''}
-              onChange={handleLabelChange}
-              margin="normal"
-            />
-          </Grid>
-          <Grid item xs={1}>
-            <IconButton onClick={handleRemoveQuestion}>
-              <DeleteIcon />
-            </IconButton>
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Question Type</InputLabel>
-              <Select
-                value={question.type}
-                onChange={handleTypeChange}
+    <motion.div
+      layout
+      initial={{ opacity: 0, x: -50, scale: 0.9 }}
+      animate={{ opacity: 1, x: 0, scale: 1 }}
+      exit={{ opacity: 0, x: 50, scale: 0.9 }}
+      transition={{ 
+        layout: { duration: 0.3 },
+        opacity: { duration: 0.5 },
+        scale: { duration: 0.3 }
+      }}
+      whileHover={{ scale: 1.02 }}
+    >
+      <Card style={{ marginBottom: 16 }}>
+        <CardContent>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={11}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
               >
-                <MenuItem value="text">Text</MenuItem>
-                <MenuItem value="rating">Rating (1-5)</MenuItem>
-                <MenuItem value="multiple-choice">Multiple Choice</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          {question.type === 'multiple-choice' && (
-            <Grid item xs={12}>
-              <Typography variant="subtitle2" gutterBottom>
-                Options:
-              </Typography>
-              {question.options?.map((option, index) => (
-                <Box key={index} display="flex" alignItems="center" mb={1}>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    value={option}
-                    onChange={(e) => handleOptionChange(index, e.target.value)}
-                    placeholder={`Option ${index + 1}`}
-                  />
-                  <IconButton 
-                    size="small" 
-                    onClick={() => handleRemoveOption(index)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Box>
-              ))}
-              <Button 
-                startIcon={<AddIcon />} 
-                onClick={handleAddOption}
-                size="small"
-              >
-                Add Option
-              </Button>
+                <TextField
+                  fullWidth
+                  label="Question"
+                  value={question.label || ''}
+                  onChange={handleLabelChange}
+                  margin="normal"
+                />
+              </motion.div>
             </Grid>
-          )}
-        </Grid>
-      </CardContent>
-    </Card>
+            <Grid item xs={1}>
+              <motion.div
+                whileHover={{ scale: 1.1, rotate: 180 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ duration: 0.2 }}
+              >
+                <IconButton onClick={handleRemoveQuestion}>
+                  <DeleteIcon />
+                </IconButton>
+              </motion.div>
+            </Grid>
+            <Grid item xs={6}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <FormControl fullWidth margin="normal">
+                  <InputLabel>Question Type</InputLabel>
+                  <Select
+                    value={question.type}
+                    onChange={handleTypeChange}
+                  >
+                    <MenuItem value="text">Text</MenuItem>
+                    <MenuItem value="rating">Rating (1-5)</MenuItem>
+                    <MenuItem value="multiple-choice">Multiple Choice</MenuItem>
+                  </Select>
+                </FormControl>
+              </motion.div>
+            </Grid>
+            <AnimatePresence>
+              {question.type === 'multiple-choice' && (
+                <motion.div
+                  key="options"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ width: '100%' }}
+                >
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle2" gutterBottom>
+                      Options:
+                    </Typography>
+                    <AnimatePresence>
+                      {question.options?.map((option, index) => (
+                        <motion.div
+                          key={index}
+                          layout
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 20 }}
+                          transition={{ duration: 0.2, delay: index * 0.05 }}
+                        >
+                          <Box display="flex" alignItems="center" mb={1}>
+                            <TextField
+                              fullWidth
+                              size="small"
+                              value={option}
+                              onChange={(e) => handleOptionChange(index, e.target.value)}
+                              placeholder={`Option ${index + 1}`}
+                            />
+                            <motion.div
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              <IconButton 
+                                size="small" 
+                                onClick={() => handleRemoveOption(index)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </motion.div>
+                          </Box>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Button 
+                        startIcon={<AddIcon />} 
+                        onClick={handleAddOption}
+                        size="small"
+                      >
+                        Add Option
+                      </Button>
+                    </motion.div>
+                  </Grid>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </Grid>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 });
 
@@ -164,6 +228,14 @@ export const SurveyBuilderPage = () => {
   const alertApi = useApi(alertApiRef);
   const navigate = useNavigate();
   const catalogApi = useBackstageApi(catalogApiRef);
+  const { canCreateSurveys } = useUserRole();
+
+  // Redirect if user doesn't have permission to create surveys
+  useEffect(() => {
+    if (!canCreateSurveys) {
+      navigate('/surveys');
+    }
+  }, [canCreateSurveys, navigate]);
 
   // Fetch templates from the catalog on mount
   useEffect(() => {
@@ -305,12 +377,28 @@ export const SurveyBuilderPage = () => {
 
   return (
     <Page themeId="tool">
-      <Header title="Create Survey" subtitle="Build a feedback form for the developer community" />
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <Header title="Create Survey" subtitle="Build a feedback form for the developer community" />
+      </motion.div>
       <Content>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
-            <InfoCard title="Survey Details">
-              <Grid container spacing={2}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+        >
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={8}>
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+              >
+                <InfoCard title="Survey Details">
+                  <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
                     fullWidth
@@ -371,96 +459,166 @@ export const SurveyBuilderPage = () => {
                 </Grid>
               </Grid>
             </InfoCard>
+            </motion.div>
 
-            <Box mt={3}>
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              <Box mt={3}>
               <ContentHeader title="Questions">
-                <Button
-                  variant="outlined"
-                  startIcon={<AddIcon />}
-                  onClick={addQuestion}
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  Add Question
-                </Button>
+                  <Button
+                    variant="outlined"
+                    startIcon={<AddIcon />}
+                    onClick={addQuestion}
+                  >
+                    Add Question
+                  </Button>
+                </motion.div>
               </ContentHeader>
-              {questions.map((question) => (
-                <QuestionBuilder 
-                  key={question.tempId} 
-                  question={question}
-                  updateQuestion={updateQuestion}
-                  removeQuestion={removeQuestion}
-                  addOption={addOption}
-                  updateOption={updateOption}
-                  removeOption={removeOption}
-                />
-              ))}
+              <AnimatePresence>
+                {questions.map((question) => (
+                  <QuestionBuilder 
+                    key={question.tempId} 
+                    question={question}
+                    updateQuestion={updateQuestion}
+                    removeQuestion={removeQuestion}
+                    addOption={addOption}
+                    updateOption={updateOption}
+                    removeOption={removeOption}
+                  />
+                ))}
+              </AnimatePresence>
               {questions.length === 0 && (
-                <Card>
-                  <CardContent>
-                    <Typography variant="body1" color="textSecondary" align="center">
-                      No questions added yet. Click "Add Question" to get started.
-                    </Typography>
-                  </CardContent>
-                </Card>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Card>
+                    <CardContent>
+                      <motion.div
+                        animate={{ 
+                          y: [0, -5, 0],
+                        }}
+                        transition={{ 
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        <Typography variant="body1" color="textSecondary" align="center">
+                          No questions added yet. Click "Add Question" to get started.
+                        </Typography>
+                      </motion.div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               )}
             </Box>
 
             <Box mt={3} display="flex">
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-                disabled={loading}
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 style={{ marginRight: 16 }}
               >
-                {loading ? 'Creating...' : 'Create Survey'}
-              </Button>
-              <Button
-                variant="outlined"
-                onClick={() => navigate('/surveys')}
-                disabled={loading}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleSubmit}
+                  disabled={loading}
+                >
+                  {loading ? 'Creating...' : 'Create Survey'}
+                </Button>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Cancel
-              </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate('/surveys')}
+                  disabled={loading}
+                >
+                  Cancel
+                </Button>
+              </motion.div>
             </Box>
+            </motion.div>
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <InfoCard title="Preview">
-              <Typography variant="body2" paragraph>
-                Title: {title || 'Untitled Survey'}
-              </Typography>
-              <Typography variant="body2" paragraph>
-                Description: {description || 'No description'}
-              </Typography>
-              {ownerGroup && (
-                <Box mb={2}>
-                  <Chip size="small" label={ownerGroup} />
-                </Box>
-              )}
-              {selectedTemplates.length > 0 && (
-                <Box mb={2}>
-                  <Typography variant="body2" style={{ fontWeight: 500 }}>
-                    Selected Templates:
-                  </Typography>
-                  <Box display="flex" flexWrap="wrap" gap={1} mt={1}>
-                    {selectedTemplates.map((template, idx) => (
-                      <Chip
-                        key={idx}
-                        size="small"
-                        label={template?.metadata?.title || template?.metadata?.name}
-                        color="primary"
-                        variant="outlined"
-                      />
-                    ))}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.8, duration: 0.5 }}
+            >
+              <InfoCard title="Preview">
+              <Box style={{ background: '#23272f', borderRadius: 12, padding: 16 }}>
+                <Typography variant="h6" style={{ fontWeight: 600, marginBottom: 8, color: '#fff' }}>
+                  Survey
+                </Typography>
+                <Typography variant="body2" paragraph style={{ color: '#fff' }}>
+                  Title: {title || 'Untitled Survey'}
+                </Typography>
+                <Typography variant="body2" paragraph style={{ color: '#fff' }}>
+                  Description: {description || 'No description'}
+                </Typography>
+                {ownerGroup && (
+                  <Box mb={2}>
+                    <Chip size="small" label={ownerGroup} style={{ background: '#333', color: '#fff' }} />
                   </Box>
-                </Box>
-              )}
-              <Typography variant="body2">
-                Questions: {questions.length}
-              </Typography>
+                )}
+                {selectedTemplates.length > 0 && (
+                  <Box mb={2}>
+                    <Typography variant="body2" style={{ fontWeight: 500, color: '#fff' }} gutterBottom>
+                      Related Templates Preview:
+                    </Typography>
+                    <Card variant="outlined" style={{ padding: '12px', backgroundColor: '#181a20', borderColor: '#444' }}>
+                      <Typography variant="caption" style={{ color: '#bbb' }} gutterBottom>
+                        These templates are related to the Survey Center and will be linked to your survey
+                      </Typography>
+                      <Box display="flex" flexWrap="wrap" mt={1} style={{ gap: '8px' }}>
+                        {selectedTemplates.map((template, idx) => (
+                          <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: idx * 0.1 }}
+                          >
+                            <Chip
+                              size="small"
+                              label={template?.metadata?.title || template?.metadata?.name}
+                              color="primary"
+                              variant="outlined"
+                              style={{ backgroundColor: '#23272f', color: '#fff', borderColor: '#1976d2' }}
+                            />
+                          </motion.div>
+                        ))}
+                      </Box>
+                      {selectedTemplates.length > 0 && (
+                        <Typography variant="caption" style={{ marginTop: '8px', display: 'block', color: '#90caf9' }}>
+                          ✓ Survey will appear in Survey Center with these template associations
+                        </Typography>
+                      )}
+                    </Card>
+                  </Box>
+                )}
+                <Typography variant="body2" style={{ color: '#fff' }}>
+                  Questions: {questions.length}
+                </Typography>
+              </Box>
             </InfoCard>
+            </motion.div>
           </Grid>
         </Grid>
+        </motion.div>
       </Content>
     </Page>
   );

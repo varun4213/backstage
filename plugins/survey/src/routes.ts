@@ -11,3 +11,7 @@ export const surveyCreateRouteRef = createRouteRef({
 export const surveyViewRouteRef = createRouteRef({
   id: 'survey-view',
 });
+
+export const surveyResultsRouteRef = createRouteRef({
+  id: 'survey-results',
+});
