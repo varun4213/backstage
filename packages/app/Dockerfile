@@ -8,17 +8,11 @@ RUN apk add --no-cache python3 make g++ && \
 
 WORKDIR /app
 
-# Copy package files for caching
-COPY package.json yarn.lock .yarnrc.yml ./
-COPY .yarn/releases ./.yarn/releases
-COPY packages/app/package.json ./packages/app/
-COPY packages/*/package.json ./packages/
+# Copy all monorepo sources needed for workspace install
+COPY . .
 
 # Install dependencies
 RUN yarn install --immutable
-
-# Copy source code
-COPY . .
 
 # Build the frontend
 RUN yarn tsc && yarn build:frontend
