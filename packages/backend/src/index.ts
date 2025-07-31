@@ -10,7 +10,7 @@ import { createBackend } from '@backstage/backend-defaults';
 
 const backend = createBackend();
 
-backend.add(import('@backstage/plugin-app-backend'));
+// Note: app-backend plugin removed for separate frontend deployment
 backend.add(import('@backstage/plugin-proxy-backend'));
 backend.add(import('@backstage/plugin-scaffolder-backend'));
 backend.add(import('@backstage/plugin-scaffolder-backend-module-github'));
