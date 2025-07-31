@@ -3659,43 +3659,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-app-backend@npm:^0.5.4":
-  version: 0.5.4
-  resolution: "@backstage/plugin-app-backend@npm:0.5.4"
+"@backstage/plugin-app@npm:^0.1.11":
+  version: 0.1.11
+  resolution: "@backstage/plugin-app@npm:0.1.11"
   dependencies:
-    "@backstage/backend-plugin-api": "npm:^1.4.1"
-    "@backstage/config": "npm:^1.3.3"
-    "@backstage/config-loader": "npm:^1.10.2"
-    "@backstage/errors": "npm:^1.2.7"
-    "@backstage/plugin-app-node": "npm:^0.1.35"
-    "@backstage/plugin-auth-node": "npm:^0.6.5"
+    "@backstage/core-components": "npm:^0.17.4"
+    "@backstage/core-plugin-api": "npm:^1.10.9"
+    "@backstage/frontend-plugin-api": "npm:^0.10.4"
+    "@backstage/integration-react": "npm:^1.2.9"
+    "@backstage/plugin-permission-react": "npm:^0.4.36"
+    "@backstage/theme": "npm:^0.6.7"
     "@backstage/types": "npm:^1.2.1"
-    express: "npm:^4.17.1"
-    express-promise-router: "npm:^4.1.0"
-    fs-extra: "npm:^11.2.0"
-    globby: "npm:^11.0.0"
-    helmet: "npm:^6.0.0"
-    knex: "npm:^3.0.0"
-    lodash: "npm:^4.17.21"
-    luxon: "npm:^3.0.0"
-    yn: "npm:^4.0.0"
-  checksum: 10c0/1c03d484daf4d065c6d8e8cc636a16c5d9d0968a961280589ce1e126948995561d2d08c339da56ec7833cbf9d4df962288b2c2adaad1a66007c4a68013b022c9
+    "@material-ui/core": "npm:^4.9.13"
+    "@material-ui/icons": "npm:^4.9.1"
+    "@material-ui/lab": "npm:^4.0.0-alpha.61"
+    react-use: "npm:^17.2.4"
+  peerDependencies:
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+    react-dom: ^17.0.0 || ^18.0.0
+    react-router-dom: ^6.3.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/fd129828d2f22fd8620445a9d8588ff0c3e2a61c31b4dc6ee1f8b8f69901ac37d7963d571aafa20d0577204ae19964d0995d9c2ab779a60fefb474454436d056
   languageName: node
   linkType: hard
 
-"@backstage/plugin-app-node@npm:^0.1.35":
-  version: 0.1.35
-  resolution: "@backstage/plugin-app-node@npm:0.1.35"
+"@backstage/plugin-auth-backend-module-github-provider@npm:^0.3.5":
+  version: 0.3.5
+  resolution: "@backstage/plugin-auth-backend-module-github-provider@npm:0.3.5"
   dependencies:
     "@backstage/backend-plugin-api": "npm:^1.4.1"
-    "@backstage/config-loader": "npm:^1.10.2"
-    "@types/express": "npm:^4.17.6"
-    express: "npm:^4.17.1"
-    fs-extra: "npm:^11.2.0"
-  checksum: 10c0/3e61943b20b9dc56fcc368dcad0f96e6e88ad7df4b05ae82d58b6e5fd0c7e8326ff0907e59b30bd068541c66fb81167440f067467ae16b4d2e0c5c37383f17be
-  languageName: node
-  linkType: hard
-
+    "@backstage/plugin-auth-node": "npm:^0.6.5"
+    passport-github2: "npm:^0.1.12"
+    zod: "npm:^3.22.4"
   checksum: 10c0/4f71abf9baf61132ff0b6e296a0a1338346f9ad86eb66e6897e10dd8174683fafed137ba159f59b4b6786b9236fa4c300792db3462f63f829929d41ed443615d
   languageName: node
   linkType: hard
@@ -15533,12 +15531,6 @@ __metadata:
   checksum: 10c0/60060daf71743539df845382bdfa0bffe2268bd02f0285d4714a4ed8ce610b5810eb157b831cf2b3133d248e6de338c83c48ab9164a5f6069bb0e9c146531b53
   languageName: node
   linkType: hard
-
-"app@link:../app::locator=backend%40workspace%3Apackages%2Fbackend":
-  version: 0.0.0-use.local
-  resolution: "app@link:../app::locator=backend%40workspace%3Apackages%2Fbackend"
-  languageName: node
-  linkType: soft
 
 "app@workspace:packages/app":
   version: 0.0.0-use.local
