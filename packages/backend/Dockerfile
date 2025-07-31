@@ -22,22 +22,16 @@ RUN apk add --no-cache python3 make g++ sqlite-dev && \
 
 WORKDIR /app
 
-# Copy package files
-COPY package.json yarn.lock ./
-COPY .yarn ./.yarn
-COPY .yarnrc.yml ./
-COPY backstage.json ./
-COPY packages packages
-COPY plugins plugins
 
-# Remove src directories to speed up install
-RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {} \+
+# Copy all monorepo sources needed for workspace install
+COPY . .
+
+# Remove src directories to speed up install (optional, can be commented out if needed for build)
+# RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {} \+
 
 # Install dependencies
 RUN yarn install --immutable
 
-# Copy source code
-COPY . .
 
 # Build the backend
 RUN yarn tsc
