@@ -10,13 +10,15 @@
 # Once the commands have been run, you can build the image using `yarn build-image`
 
 # Multi-stage build for Backstage backend
-FROM node:18.20.8-alpine as builder
+FROM node:18.20.8-alpine AS builder
 
-# Set Python interpreter for node-gyp
+# Set Python interpreter for node-gyp and enable Corepack for Yarn 4
 ENV PYTHON=/usr/bin/python3
 
 # Install build dependencies
-RUN apk add --no-cache python3 make g++ sqlite-dev
+RUN apk add --no-cache python3 make g++ sqlite-dev && \
+    corepack enable && \
+    corepack prepare yarn@4.4.1 --activate
 
 WORKDIR /app
 
@@ -32,23 +34,25 @@ COPY plugins plugins
 RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {} \+
 
 # Install dependencies
-RUN yarn install --frozen-lockfile
+RUN yarn install --immutable
 
 # Copy source code
 COPY . .
 
 # Build the backend
 RUN yarn tsc
-RUN yarn build:backend --config ../../app-config.yaml
+RUN yarn build:backend
 
 # Production stage
 FROM node:18.20.8-alpine
 
-# Set Python interpreter for node-gyp
+# Set Python interpreter for node-gyp and enable Corepack for Yarn 4
 ENV PYTHON=/usr/bin/python3
 
 # Install runtime dependencies
-RUN apk add --no-cache python3 make g++ sqlite-dev
+RUN apk add --no-cache python3 make g++ sqlite-dev && \
+    corepack enable && \
+    corepack prepare yarn@4.4.1 --activate
 
 # From here on we use the least-privileged node user
 USER node
