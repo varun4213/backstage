@@ -170,7 +170,7 @@ export const SurveyResultsPage = () => {
   }
 
   return (
-    <Page themeId="tool" style={{ padding: 0, backgroundImage: 'none', backgroundColor: 'transparent' }}>
+    <Page themeId="tool">
       {/* Full-width header wrapper */}
       <Box
         component="header"
@@ -182,7 +182,6 @@ export const SurveyResultsPage = () => {
         marginRight="-50vw"
         bgcolor="primary.main"
         zIndex={1}
-        style={{ backgroundImage: 'none' }}
       >
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -259,12 +258,11 @@ export const SurveyResultsPage = () => {
       </Box>
 
       {/* Main content */}
-      <Content style={{ backgroundImage: 'none', backgroundColor: 'transparent' }}>
+      <Content>
         <Box
           display="flex"
           justifyContent="center"
           padding="32px 0"
-          style={{ backgroundImage: 'none', backgroundColor: 'transparent' }}
         >
           {/* Constrain width of content */}
           <Box

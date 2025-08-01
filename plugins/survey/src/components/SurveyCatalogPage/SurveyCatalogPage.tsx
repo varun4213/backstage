@@ -7,7 +7,6 @@ import {
   Button,
   Box,
   Chip,
-  Container,
   IconButton,
   Tooltip,
 } from '@material-ui/core';
@@ -178,9 +177,6 @@ export const SurveyCatalogPage = () => {
             background: cardBg,
             border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.05)',
             transition: 'box-shadow 0.2s ease-in-out',
-            '&:hover': {
-              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1)',
-            }
           }}
         >
           <CardContent 
@@ -383,10 +379,6 @@ export const SurveyCatalogPage = () => {
                       borderRadius: '8px',
                       padding: '8px',
                       transition: 'all 0.2s ease-in-out',
-                      '&:hover': {
-                        backgroundColor: isDark ? 'rgba(244, 67, 54, 0.2)' : 'rgba(244, 67, 54, 0.1)',
-                        borderColor: '#f44336',
-                      }
                     }}
                   >
                     <DeleteIcon fontSize="small" />
@@ -401,7 +393,7 @@ export const SurveyCatalogPage = () => {
   };
 
   return (
-    <Page themeId="tool" style={{ padding: 0, backgroundImage: 'none', backgroundColor: 'transparent' }}>
+    <Page themeId="tool">
       {/* Full-width header wrapper */}
       <Box
         component="header"
@@ -413,7 +405,6 @@ export const SurveyCatalogPage = () => {
         marginRight="-50vw"
         bgcolor="primary.main"
         zIndex={1}
-        style={{ backgroundImage: 'none' }}
       >
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -454,12 +445,11 @@ export const SurveyCatalogPage = () => {
       </Box>
 
       {/* Main content */}
-      <Content style={{ backgroundImage: 'none', backgroundColor: 'transparent' }}>
+      <Content>
         <Box
           display="flex"
           justifyContent="center"
           padding="32px 0"
-          style={{ backgroundImage: 'none', backgroundColor: 'transparent' }}
         >
           {/* Constrain width of grid */}
           <Box
@@ -528,7 +518,6 @@ export const SurveyCatalogPage = () => {
                 <Box
                   display="grid"
                   gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
-                  gap="48px"
                   marginTop="32px"
                   style={{
                     gridGap: '48px', // Fallback for older browsers

@@ -33,7 +33,7 @@ const USER_ROLES: { value: UserRole; label: string; description: string; color: 
 ];
 
 export const UserRoleSelector: React.FC = () => {
-  const { currentUser, setCurrentUser, canCreateSurveys, canViewResults, canSubmitResponses } = useUserRole();
+  const { currentUser, setCurrentUser } = useUserRole();
 
   const currentUserInfo = USER_ROLES.find(role => role.value === currentUser);
 
