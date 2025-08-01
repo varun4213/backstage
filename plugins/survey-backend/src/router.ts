@@ -230,5 +230,33 @@ export async function createRouter({
     res.json(results);
   });
 
+  // Delete survey endpoint
+  router.delete('/surveys/:id', async (req, res) => {
+    // Get user credentials for authentication
+    await httpAuth.credentials(req, { allow: ['user'] });
+    
+    const surveyId = req.params.id;
+    
+    // Check if survey exists
+    const survey = await knex('surveys').where('id', surveyId).first();
+    if (!survey) {
+      throw new InputError(`Survey with id ${surveyId} not found`);
+    }
+
+    // Delete in transaction to ensure data consistency
+    await knex.transaction(async (trx) => {
+      // Delete responses first (foreign key constraint)
+      await trx('responses').where('surveyId', surveyId).del();
+      
+      // Delete questions
+      await trx('questions').where('surveyId', surveyId).del();
+      
+      // Delete survey
+      await trx('surveys').where('id', surveyId).del();
+    });
+
+    res.status(200).json({ message: `Survey ${surveyId} deleted successfully` });
+  });
+
   return router;
 }

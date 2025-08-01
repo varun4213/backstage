@@ -8,6 +8,7 @@ interface UserRoleContextType {
   canCreateSurveys: boolean;
   canViewResults: boolean;
   canSubmitResponses: boolean;
+  canDeleteSurveys: boolean;
 }
 
 const UserRoleContext = createContext<UserRoleContextType | undefined>(undefined);
@@ -31,6 +32,7 @@ export const UserRoleProvider: React.FC<UserRoleProviderProps> = ({ children }) 
   const canCreateSurveys = currentUser === 'guest1';
   const canViewResults = currentUser === 'guest1';
   const canSubmitResponses = currentUser !== 'guest1'; // guest2 and guest3 only
+  const canDeleteSurveys = currentUser === 'guest1';
 
   const value: UserRoleContextType = {
     currentUser,
@@ -38,6 +40,7 @@ export const UserRoleProvider: React.FC<UserRoleProviderProps> = ({ children }) 
     canCreateSurveys,
     canViewResults,
     canSubmitResponses,
+    canDeleteSurveys,
   };
 
   return (

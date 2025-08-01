@@ -43,8 +43,8 @@ export const UserRoleSelector: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <Box display="flex" alignItems="center" style={{ gap: '16px' }}>
-        <FormControl variant="outlined" size="small" style={{ minWidth: 150 }}>
+      <Box display="flex" alignItems="center" style={{ gap: '12px' }}>
+        <FormControl variant="outlined" size="small" style={{ minWidth: 120 }}>
           <InputLabel>Current User</InputLabel>
           <Select
             value={currentUser}
@@ -76,53 +76,10 @@ export const UserRoleSelector: React.FC = () => {
               label={currentUserInfo.label}
               color={currentUserInfo.color}
               size="small"
+              style={{ fontWeight: 'bold' }}
             />
           </motion.div>
         )}
-
-        <Box display="flex" style={{ gap: '8px' }}>
-          {canCreateSurveys && (
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              <Chip
-                label="Create"
-                size="small"
-                variant="outlined"
-                color="primary"
-              />
-            </motion.div>
-          )}
-          {canViewResults && (
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              <Chip
-                label="View Results"
-                size="small"
-                variant="outlined"
-                color="primary"
-              />
-            </motion.div>
-          )}
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            <Chip
-              label="Submit"
-              size="small"
-              variant="outlined"
-              color={canSubmitResponses ? "secondary" : "default"}
-              style={{ opacity: canSubmitResponses ? 1 : 0.5 }}
-            />
-          </motion.div>
-        </Box>
       </Box>
     </motion.div>
   );
